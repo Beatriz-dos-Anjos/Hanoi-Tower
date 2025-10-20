@@ -94,22 +94,31 @@ hanoi_modificado:
     ; Move disco atual
     call mostrar_movimento
 
-    ; Segunda recursão: hanoi(n-1, auxiliar, destino, origem)
-    push r12
-    push r13
-    push r14
-    push r15
-    
-    dec r12                    ; n-1
-    xchg r13, r15              ; troca origem e auxiliar
-    
-    call hanoi_modificado
-    
-    pop r15
-    pop r14
-    pop r13
-    pop r12
-    
+  ; Segunda recursão desejada: hanoi(n-1, meio, inicial, final)
+push r12
+push r13
+push r14
+push r15
+
+dec r12
+
+; queremos: r13 = meio (r15 antigo), r14 = inicial (r13 antigo), r15 = final (r14 antigo)
+
+mov rbx, r15     ; salva MEIO
+mov rcx, r13     ; salva INICIAL
+mov rdx, r14     ; salva FINAL
+
+mov r13, rbx     ; origem  = meio
+mov r14, rcx     ; destino = inicial
+mov r15, rdx     ; auxiliar = final
+
+call hanoi_modificado
+
+pop r15
+pop r14
+pop r13
+pop r12
+
     ret
 
 mover_disco_unico:
